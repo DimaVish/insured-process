@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: insured-process
+
+server:
+  port: 8080
+
+logging:
+  level:
+    com.assignment.insuredprocess: INFO
+    org.springframework.web: INFO

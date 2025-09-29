@@ -1,0 +1,98 @@
+###
+# Insured Process API - REST Client Collection
+# Compatible with IntelliJ IDEA and VS Code REST Client extension
+###
+
+@baseUrl = http://localhost:8080
+
+### 1. Create New Client
+POST {{baseUrl}}/api/clients
+Content-Type: application/json
+
+{
+    "clientId": "C003",
+    "contactType": "email",
+    "contactValue": "test@example.com"
+}
+
+### 2. Authenticate Existing Client (Sample Data)
+POST {{baseUrl}}/api/clients/authenticate
+Content-Type: application/json
+
+{
+    "clientId": "C001",
+    "contactType": "email",
+    "contactValue": "john@example.com"
+}
+
+### 3. Authenticate Client - Invalid Credentials (should fail)
+POST {{baseUrl}}/api/clients/authenticate
+Content-Type: application/json
+
+{
+    "clientId": "C001",
+    "contactType": "email",
+    "contactValue": "wrong@example.com"
+}
+
+### 4. Get Client Products (after authentication)
+GET {{baseUrl}}/api/clients/C001/products
+
+### 5. Create New Product
+POST {{baseUrl}}/api/products
+Content-Type: application/json
+
+{
+    "id": "P004",
+    "name": "Travel Insurance",
+    "description": "Comprehensive travel protection coverage"
+}
+
+### 6. Buy Product (Client C001 buys Health Insurance)
+POST {{baseUrl}}/api/products/P001/buy?clientId=C001
+
+### 7. Buy Another Product (Client C001 buys Auto Insurance)
+POST {{baseUrl}}/api/products/P002/buy?clientId=C001
+
+### 8. Try to Buy Same Product Again (should fail)
+POST {{baseUrl}}/api/products/P001/buy?clientId=C001
+
+### 9. Update Product (Client must own the product)
+PUT {{baseUrl}}/api/products/P001?clientId=C001
+Content-Type: application/json
+
+{
+    "name": "Premium Health Insurance",
+    "description": "Enhanced comprehensive health coverage with additional benefits"
+}
+
+### 10. Try to Update Product Not Owned (should fail)
+PUT {{baseUrl}}/api/products/P003?clientId=C001
+Content-Type: application/json
+
+{
+    "name": "Updated Life Insurance",
+    "description": "Should fail because client doesn't own this product"
+}
+
+### 11. Get Client Products After Purchases
+GET {{baseUrl}}/api/clients/C001/products
+
+### 12. Test with Non-Existent Client (should fail)
+GET {{baseUrl}}/api/clients/INVALID/products
+
+### 13. Create Second Client
+POST {{baseUrl}}/api/clients
+Content-Type: application/json
+
+{
+    "clientId": "C004",
+    "contactType": "phone",
+    "contactValue": "555-9999"
+}
+
+### 14. Second Client Buys Product
+POST {{baseUrl}}/api/products/P003/buy?clientId=C004
+
+### 15. Get Second Client Products
+GET {{baseUrl}}/api/clients/C004/products
